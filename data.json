@@ -1,0 +1,30 @@
+[
+    {
+        "name": "sadiq",
+        "rollno": 12,
+        "total_attendance": 9,
+        "date": [
+            "27:4:2023",
+            "28:4:2023",
+            "29:4:2023"
+        ]
+    },
+    {
+        "name": "irfan",
+        "rollno": 15,
+        "total_attendance": 10,
+        "date": [
+            "27:4:2023",
+            "29:4:2023"
+        ]
+    },
+    {
+        "name": "shoaib",
+        "rollno": 19,
+        "total_attendance": 5,
+        "date": [
+            "27:4:2023",
+            "29:4:2023"
+        ]
+    }
+]
