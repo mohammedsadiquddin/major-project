@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Attendance Tracker</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <h1>Attendance Tracker</h1>
+    </header>
+    <main>
+      <ul id="names">
+        <!-- populate the list with names from the JSON data file -->
+      </ul>
+    </main>
+    <script>
+      // load the JSON data file
+      fetch("data.json")
+        .then((response) => response.json())
+        .then((data) => {
+          // get a reference to the names list
+          const namesList = document.getElementById("names");
+          // loop through the data and add each name to the list
+          data.forEach((person) => {
+            const li = document.createElement("li");
+            li.textContent = person.name;
+            li.addEventListener("click", () => {
+              // navigate to the next page when a name is clicked
+              window.location.href = `details.html?name=${person.name}`;
+            });
+            namesList.appendChild(li);
+          });
+        });
+    </script>
+  </body>
+</html>

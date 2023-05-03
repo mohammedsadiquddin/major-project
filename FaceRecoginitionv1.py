@@ -92,22 +92,24 @@ while True:
                 for i in range(len(data)):
                     # print(data[i]['name'])
                     if name == data[i]['name']:
-                                last_date = data[i]["date"][-1]
-                                if last_date == "29:4:2023":
+                                new_date="{}-{}-{}".format(current_time.day,current_time.month,current_time.year)
+                                last_date = data[i]["present"][-1]
+                                if last_date == new_date:
                                     print("your attendance is already recorded")
-                                    time.sleep(10)
+                                    text_speech.say(" {} your attendance is already recorded for today ,,, and your total attendance is {}".format(known_face_names[best_match_index],data[i]['total_attendance']))
+                                    time.sleep(5)
                                     break
                                 else:
                                     print("recording your attendance")
                                     
                                     data[i]["total_attendance"] += 1
                                     
-                                    new_date="{}:{}:{}".format(current_time.day,current_time.month,current_time.year) 
+                                    # new_date="{}-{}-{}".format(current_time.day,current_time.month,current_time.year) 
 
                           
                                     # new_entry = {"date": new_date} 
 
-                                    data[i]["date"].append(new_date)
+                                    data[i]["present"].append(new_date)
 
                     # Write the updated data to the JSON file
                                     with open("data.json", "w") as outfile:

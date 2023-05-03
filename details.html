@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Attendance Details</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/v/dt/dt-1.11.3/datatables.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css"
+    />
+  </head>
+  <body>
+    <h1 id="name"></h1>
+    <h1 id="total_attendance"></h1>
+    <table id="attendance" class="display">
+      <thead>
+        <tr>
+          <th>Roll No</th>
+          <th>Sno</th>
+          <th>Present</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/v/dt/dt-1.11.3/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.0/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.html5.min.js"></script>
+    <script>
+      // get the name from the query parameter
+      const params = new URLSearchParams(window.location.search);
+      const name = params.get("name");
+      // find the person in the JSON data file
+      fetch("data.json")
+        .then((response) => response.json())
+        .then((data) => {
+          const person = data.find((p) => p.name === name);
+          // update the page with the person's name and attendance details
+          document.getElementById("name").textContent =
+            "Student Name: " + person.name;
+          document.getElementById("total_attendance").textContent =
+            "Total Attendance: " + person.total_attendance;
+          const table = $("#attendance").DataTable({
+            data: person.present.map((date, index) => [
+              index + 1,
+              person.rollno,
+              date,
+            ]),
+            columns: [
+              { title: "Sno" },
+              { title: "Rollno" },
+              { title: "Present" },
+            ],
+            lengthMenu: [10, 25, 50, 75, 100],
+            pageLength: 10,
+            dom: "Blfrtip",
+            buttons: [
+              // {
+              //   extend: "excel",
+              //   text: "Export as Excel",
+              //   className: "btn btn-primary",
+              // },
+              {
+                extend: "csv",
+                text: "Export as CSV",
+                className: "btn btn-primary",
+                titleAttr: "Export as CSV",
+                init: function (api, node, config) {
+                  $(node).removeClass("dt-button").addClass("btn btn-primary");
+                },
+              },
+            ],
+          });
+        });
+    </script>
+  </body>
+</html>
