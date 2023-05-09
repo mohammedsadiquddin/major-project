@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script
+      src="https://cdn.plot.ly/plotly-2.20.0.min.js"
+      charset="utf-8"
+    ></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="chart" style="width: 50vw; margin: auto"></div>
+    <script>
+      // Fetch data from data.json file
+      fetch("data.json")
+        .then((response) => response.json())
+        .then((data) => {
+          // Extract name and total_attendance data from the object
+          const names = data.map((item) => item.name);
+          const totalAttendances = data.map((item) => item.total_attendance);
+
+          // Create bar chart using Plotly.js
+          const trace = {
+            x: names,
+            y: totalAttendances,
+            type: "bar",
+          };
+          const layout = {
+            title: "Total Attendance of Students",
+            xaxis: {
+              title: "Name",
+            },
+            yaxis: {
+              title: "Total Attendance",
+            },
+          };
+          const config = {
+            responsive: true,
+          };
+          Plotly.newPlot("chart", [trace], layout, config);
+        })
+        .catch((error) => console.log(error));
+    </script>
+  </body>
+</html>

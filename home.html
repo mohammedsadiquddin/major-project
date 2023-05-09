@@ -3,15 +3,70 @@
   <head>
     <title>Attendance Tracker</title>
     <link rel="stylesheet" href="style.css" />
+    <script
+      src="https://cdn.plot.ly/plotly-2.20.0.min.js"
+      charset="utf-8"
+    ></script>
   </head>
   <body>
     <header>
       <h1>Attendance Tracker</h1>
+      <button id="logout-btn">click here to logout</button>
     </header>
     <main>
       <ul id="names">
         <!-- populate the list with names from the JSON data file -->
       </ul>
+      <div
+        class="text-center"
+        style="display: flex; justify-content: center; margin-top: 20px"
+      >
+        <button
+          id="new-student-btn"
+          style="
+            text-align: center;
+            margin: auto;
+            color: white;
+            background-color: blue;
+            padding: 21px;
+            border-radius: 15px;
+          "
+        >
+          Add New Student
+        </button>
+      </div>
+      <div id="chart" style="width: 50vw; margin: auto"></div>
+      <script>
+        // Fetch data from data.json file
+        fetch("data.json")
+          .then((response) => response.json())
+          .then((data) => {
+            // Extract name and total_attendance data from the object
+            const names = data.map((item) => item.name);
+            const totalAttendances = data.map((item) => item.total_attendance);
+
+            // Create bar chart using Plotly.js
+            const trace = {
+              x: names,
+              y: totalAttendances,
+              type: "bar",
+            };
+            const layout = {
+              title: "Total Attendance of Students",
+              xaxis: {
+                title: "Name",
+              },
+              yaxis: {
+                title: "Total Attendance",
+              },
+            };
+            const config = {
+              responsive: true,
+            };
+            Plotly.newPlot("chart", [trace], layout, config);
+          })
+          .catch((error) => console.log(error));
+      </script>
     </main>
     <script>
       // load the JSON data file
@@ -31,6 +86,30 @@
             namesList.appendChild(li);
           });
         });
+    </script>
+    <script>
+      // load the JSON data file
+      // ...
+      const newStudentBtn = document.getElementById("new-student-btn");
+      newStudentBtn.addEventListener("click", () => {
+        window.location.href = "login-form-20/new-reg.html";
+      });
+    </script>
+    <script>
+      const logoutBtn = document.getElementById("logout-btn");
+      logoutBtn.addEventListener("click", () => {
+        fetch("http://localhost:3001/logout")
+          .then((response) => {
+            if (response.ok) {
+              window.location.href = "http://localhost:3001/public/index.html";
+            } else {
+              console.error("Failed to logout");
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      });
     </script>
   </body>
 </html>

@@ -1,0 +1,42 @@
+<body>
+  <h1>New Student Registration</h1>
+  <form id="new-student-form">
+    <label for="name">Name:</label>
+    <input type="text" id="name" name="name" required />
+
+    <label for="rollno">Roll Number:</label>
+    <input type="text" id="rollno" name="rollno" required />
+
+    <button type="submit">Submit</button>
+  </form>
+  <script>
+    const form = document.getElementById("new-student-form");
+    form.addEventListener("submit", (event) => {
+      event.preventDefault(); // prevent default form submission
+      const name = document.getElementById("name").value;
+      const rollno = document.getElementById("rollno").value;
+      const newStudent = { name, rollno, total_attendance: 0, present: [] };
+      // Load the data from data.json
+      fetch("data.json")
+        .then((response) => response.json())
+        .then((data) => {
+          // Add the new student to the data array
+          data.push(newStudent);
+          // Save the updated data back to the data.json file
+          fetch("http://localhost:3001/data", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(data),
+          })
+            .then((response) => response.text())
+            .then((result) => {
+              console.log(result);
+            })
+            .catch((error) => console.log("Error:", error));
+        })
+        .catch((error) => console.log("Error:", error));
+    });
+  </script>
+</body>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Attendance Details</title>
+    <link rel="stylesheet" type="text/css" href="../style.css" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/v/dt/dt-1.11.3/datatables.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css"
+    />
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th>Sno</th>
+          <th>Name</th>
+          <th>Image</th>
+        </tr>
+      </thead>
+      <tbody id="data-table-body"></tbody>
+    </table>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/v/dt/dt-1.11.3/datatables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.0/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.html5.min.js"></script>
+    <script>
+      // fetch data from data.json file
+      fetch("../data.json")
+        .then((response) => response.json())
+        .then((data) => {
+          const tableBody = document.getElementById("data-table-body");
+
+          // loop through each object in data array and create table rows
+          data.forEach((row, index) => {
+            const tableRow = document.createElement("tr");
+
+            // add sno
+            const sno = document.createElement("td");
+            sno.innerText = index + 1;
+            tableRow.appendChild(sno);
+
+            // add name
+            const name = document.createElement("td");
+
+            name.innerText = row.name;
+
+            name.onclick = () => {
+              window.location.href = `../details.html?name=${row.name}`;
+            };
+
+            tableRow.appendChild(name);
+
+            // add image
+            const image = document.createElement("td");
+            const img = document.createElement("img");
+            img.src = row.img_path;
+            img.alt = row.name;
+
+            name.style.cursor = "pointer";
+
+            img.style.width = "250px"; // set image width
+            image.appendChild(img);
+            tableRow.appendChild(image);
+
+            tableBody.appendChild(tableRow);
+          });
+        })
+
+        .catch((error) => console.error(error));
+    </script>
+  </body>
+</html>

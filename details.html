@@ -15,6 +15,8 @@
     />
   </head>
   <body>
+    <button id="logout-btn">click here to logout</button>
+
     <h1 id="name"></h1>
     <h1 id="total_attendance"></h1>
     <table id="attendance" class="display">
@@ -77,6 +79,23 @@
             ],
           });
         });
+    </script>
+
+    <script>
+      const logoutBtn = document.getElementById("logout-btn");
+      logoutBtn.addEventListener("click", () => {
+        fetch("http://localhost:3001/logout")
+          .then((response) => {
+            if (response.ok) {
+              window.location.href = "http://localhost:3001/public/index.html";
+            } else {
+              console.error("Failed to logout");
+            }
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      });
     </script>
   </body>
 </html>

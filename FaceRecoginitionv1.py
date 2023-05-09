@@ -7,13 +7,11 @@ import numpy as np
 import pyttsx3
 import json
 import datetime
-     
+
 # using now() to get current time
 current_time = datetime.datetime.now()
 
 text_speech=pyttsx3.init()
-
-sadiq_attendance=0
 
 video_capture = cv2.VideoCapture(0)
 #list of known family members for 
@@ -22,8 +20,6 @@ sadiq_image = face_recognition.load_image_file("sadiq.jpg")
 sadiq_face_encoding = face_recognition.face_encodings(sadiq_image)[0]
 
 #Family member 2
-# numaan_image = face_recognition.load_image_file("numaan.jpg")
-# numaan_face_encoding = face_recognition.face_encodings(numaan_image)[0]
 
 irfan_image = face_recognition.load_image_file("irfan.jpg")
 irfan_face_encoding = face_recognition.face_encodings(irfan_image)[0]
@@ -35,13 +31,11 @@ shoaib_face_encoding = face_recognition.face_encodings(shoaib_image)[0]
 # Create arrays of known face encodings and their names
 known_face_encodings = [
     sadiq_face_encoding,
-    # numaan_face_encoding
     irfan_face_encoding,
     shoaib_face_encoding
 ]
 known_face_names = [
     "sadiq",
-    # "numaan"
     "irfan",
     "shoaib"
 ]
@@ -85,11 +79,15 @@ while True:
             if matches[best_match_index]:
                 name = known_face_names[best_match_index]
 
-# Load data from the JSON file
+                    # Load data from the JSON file
                 with open("data.json", "r") as infile:
                     data = json.load(infile)
 
                 for i in range(len(data)):
+                     # Get the attendance data for this person
+                    # name = data[i]["name"]
+                    # total_attendance = data[i]["total_attendance"]
+
                     # print(data[i]['name'])
                     if name == data[i]['name']:
                                 new_date="{}-{}-{}".format(current_time.day,current_time.month,current_time.year)
@@ -115,29 +113,7 @@ while True:
                                     with open("data.json", "w") as outfile:
                                         json.dump(data, outfile, indent=4)
                                     text_speech.say("hello , i,am  ,,,,  daryl   ,,,,, I ,can , recognize , you ,,, your ,name ,is {} ,,, and your attendace is {}".format(known_face_names[best_match_index],data[i]['total_attendance']))
-        
-                    # Update the total_attendance field
-                            #  data[i]["total_attendance"] += 1
-
-                    # Append a new date and attendance object to the date_and_attendance field    
-                    #          new_date="{}:{}:{}".format(current_time.day,current_time.month,current_time.year) 
-
-                          
-                    #          new_entry = {"date": new_date}
-
-                    #          data[i]["date_and_attendance"].append(new_entry)
-
-                    # # Write the updated data to the JSON file
-                    #          with open("data.json", "w") as outfile:
-                    #             json.dump(data, outfile, indent=4)
-                    #          text_speech.say("hello , i,am  ,,,,  daryl   ,,,,, I ,can , recognize , you ,,, your ,name ,is {} ,,, and your attendace is {}".format(known_face_names[best_match_index],data[i]['total_attendance']))
-                # if name=="sadiq":           
-                # # espeak.set_voice("En")
-                # # espeak.set_voice("m2")
-                # # espeak.synth("hello , i,am  ,,,,  daryl   ,,,,, I ,can , recognize , you ,,, your ,name ,is ,,,")
-                # sadiq_attendance=sadiq_attendance+1
-                # text_speech.say("hello , i,am  ,,,,  daryl   ,,,,, I ,can , recognize , you ,,, your ,name ,is {} ,,, and your attendace is".format(known_face_names[best_match_index]))
-                #you can change the voice and language from here 
+    
                 
 
             face_names.append(name)
