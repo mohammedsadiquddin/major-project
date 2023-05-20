@@ -17,36 +17,10 @@
   <body style="overflow-x: hidden">
     <header>
       <h1>Attendance Tracker</h1>
-      <button id="visualise-btn">visualise attendance</button>
-      <button id="logout-btn">logout</button>
+      <button id="logout-btn">click here to logout</button>
     </header>
 
-    <style>
-      #notify {
-        display: block; /* Important to give the content a width */
-        color: red;
-        padding: 10px;
-        width: 100%;
-        transform: translateX(100%); /* Animation start out of the screen */
-
-        /* Add the animation */
-        animation: move 30s linear infinite
-          /* infinite make reapeat the animation indefinitely */;
-      }
-
-      /* Create the animation */
-      @keyframes move {
-        to {
-          transform: translateX(-100%);
-        }
-      }
-
-      #notify:hover {
-        animation-play-state: paused;
-      }
-    </style>
-
-    <h1 id="notify">
+    <h1 style="padding: 10px">
       click on the student name to see the attendance of that student
     </h1>
 
@@ -60,7 +34,7 @@
           text-align: center;
           margin: auto;
           color: white;
-          background-color: purple;
+          background-color: blue;
           padding: 21px;
           border-radius: 15px;
         "
@@ -142,7 +116,7 @@
       // ...
       const newStudentBtn = document.getElementById("new-student-btn");
       newStudentBtn.addEventListener("click", () => {
-        window.location.href = "../form/new-reg.html";
+        window.location.href = "../login-form-20/new-reg.html";
       });
     </script>
 
@@ -160,10 +134,6 @@
           .catch((error) => {
             console.error(error);
           });
-      });
-      const visBtn = document.getElementById("visualise-btn");
-      visBtn.addEventListener("click", () => {
-        window.location.href = "http://localhost:3001/datavis.html";
       });
     </script>
   </body>

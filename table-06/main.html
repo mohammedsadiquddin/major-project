@@ -14,7 +14,29 @@
       href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css"
     />
   </head>
-  <body>
+  <body style="overflow-x: hidden">
+    <h1 style="padding: 10px">
+      click on the student name to see the attendance of that student
+    </h1>
+
+    <div
+      class="text-center"
+      style="display: flex; justify-content: center; margin-top: 20px"
+    >
+      <button
+        id="new-student-btn"
+        style="
+          text-align: center;
+          margin: auto;
+          color: white;
+          background-color: blue;
+          padding: 21px;
+          border-radius: 15px;
+        "
+      >
+        Add New Student
+      </button>
+    </div>
     <table>
       <thead>
         <tr>
@@ -29,7 +51,7 @@
     <script src="https://cdn.datatables.net/v/dt/dt-1.11.3/datatables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.0.0/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.html5.min.js"></script>
-    <script>
+    <!-- <script>
       // fetch data from data.json file
       fetch("../data.json")
         .then((response) => response.json())
@@ -73,6 +95,69 @@
         })
 
         .catch((error) => console.error(error));
+    </script> -->
+
+    <script>
+      let sno = 0;
+      // fetch data from data.json file
+      fetch("../data.json")
+        .then((response) => response.json())
+        .then((data) => {
+          const tableBody = document.getElementById("data-table-body");
+
+          // initialize DataTable
+          const dataTable = $("table").DataTable({
+            data: data,
+            columns: [
+              {
+                title: "Sno",
+                render: function (data, type, row, meta) {
+                  return (
+                    '<span style="font-size: 60px">' +
+                    (meta.row + 1) +
+                    "</span>"
+                  );
+                },
+              },
+              { title: "Name", data: "name" },
+              { title: "Image", data: "img_path" },
+            ],
+            lengthMenu: [10, 25, 50, 75, 100], // set length menu options
+            pageLength: 10, // set page length to 10
+            columnDefs: [
+              {
+                targets: 1, // index of Name column
+                render: function (data, type, row) {
+                  // make Name column clickable
+                  return `<a href="../details.html?name=${row.name}"  style="font-size: 60px;text-decoration:none"   >${data}</a>`;
+                },
+              },
+              {
+                targets: 2, // index of Image column
+                render: function (data, type, row) {
+                  // set width of image
+                  return `<img src="${data}" alt="${row.name}" style="width: 250px;">`;
+                },
+              },
+            ],
+          });
+
+          // set sno values for each row
+          dataTable.rows().every(function (rowIdx, tableLoop, rowLoop) {
+            this.data()[0] = rowIdx + 1;
+          });
+        })
+
+        .catch((error) => console.error(error));
+    </script>
+
+    <script>
+      // load the JSON data file
+      // ...
+      const newStudentBtn = document.getElementById("new-student-btn");
+      newStudentBtn.addEventListener("click", () => {
+        window.location.href = "../login-form-20/new-reg.html";
+      });
     </script>
   </body>
 </html>

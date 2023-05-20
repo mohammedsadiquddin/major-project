@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Login 10</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body class="img" style="background-image: url(images/bg.jpg); height: none">
+    <button
+      id="back-btn"
+      style="
+        color: white;
+        background-color: maroon;
+        border: 2px solid maroon;
+        border-radius: 10px;
+        margin: 5px;
+      "
+    >
+      home page
+    </button>
+    <section class="ftco-section">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-md-6 col-lg-4">
+            <div class="login-wrap p-0">
+              <h3 class="mb-4 text-center">Add new Student</h3>
+              <form id="new-student-form" class="signin-form">
+                <div class="form-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Name"
+                    required
+                    id="name"
+                    name="name"
+                  />
+                </div>
+                <div class="form-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder="Rollno"
+                    id="rollno"
+                    name="rollno"
+                    required
+                  />
+                  <!-- <span
+                    toggle="#password-field"
+                    class="fa fa-fw fa-eye field-icon toggle-password"
+                  ></span> -->
+                  <video id="video" autoplay style="height: 260px"></video>
+                  <button id="snap">Take Photo and submit</button>
+                  <canvas id="canvas"></canvas>
+                  <!-- <div class="form-group">
+                    <button
+                      type="submit"
+                      class="form-control btn btn-primary submit px-3"
+                    >
+                      Add
+                    </button>
+                  </div> -->
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <script>
+      let canvas = document.querySelector("#canvas");
+      let context = canvas.getContext("2d");
+      let video = document.querySelector("#video");
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+          video.srcObject = stream;
+          video.play();
+        });
+      }
+      document.getElementById("snap").addEventListener("click", () => {
+        context.drawImage(video, 0, 0, 220, 140);
+        var blobUrl;
+        canvas.toBlob(
+          function (blob) {
+            console.log(typeof blob);
+            blobUrl = URL.createObjectURL(blob);
+            var link = document.createElement("a");
+            link.href = blobUrl;
+            link.download = "image.jpg";
+            document.body.appendChild(link);
+            document.querySelector("a").click();
+          },
+          "image/jpeg",
+          1
+        );
+      });
+      navigator.mediaDevices
+        .getUserMedia({ video: true, audio: false })
+        .then(function (stream) {
+          video.srcObject = stream;
+          video.play();
+        })
+        .catch(function (error) {
+          console.log("Unable to access the camera: " + error);
+        });
+    </script>
+    <script>
+      const form = document.getElementById("new-student-form");
+      form.addEventListener("submit", (event) => {
+        event.preventDefault(); // prevent default form submission
+        const name = document.getElementById("name").value;
+        const rollno = document.getElementById("rollno").value;
+        // Date object
+        // const date = new Date();
+
+        // let currentDay = String(date.getDate()).padStart(2, "0");
+
+        // let currentMonth = String(date.getMonth() + 1).padStart(2, "0");
+
+        // let currentYear = date.getFullYear();
+
+        // we will display the date as DD-MM-YYYY
+
+        // let currentDate = `${currentDay}-${currentMonth}-${currentYear}`;
+
+        const newStudent = {
+          name,
+          rollno,
+          total_attendance: 0,
+          present: [],
+          img_path: `http://localhost:3001/images/${name}.jpg`,
+        };
+        // save data to JSON file using fetch() or other method
+        // Load the data from data.json
+        fetch("../data.json")
+          .then((response) => response.json())
+          .then((data) => {
+            // Get a reference to the form and the input fields
+            // Listen for the form submit event
+            // Add the new student to the data array
+            data.push(newStudent);
+            // Save the updated data back to data.json
+            fetch("http://localhost:3001/data", {
+              method: "PUT",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify(data),
+            })
+              .then((response) => response.text())
+              .then((result) => {
+                console.log(result);
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+
+            // fetch("data.json", {
+            //   method: "PUT",
+            //   headers: {
+            //     "Content-Type": "application/json",
+            //   },
+            //   body: JSON.stringify(data),
+            // })
+            //   .then((response) => response.json())
+            //   .then((data) => {
+            //     console.log("added successfully");
+            //   })
+            //   .catch((error) => {
+            //     console.error("Error updating data:", error);
+            //   });
+          })
+          .catch((error) => {
+            console.error("Error loading data:", error);
+          });
+      });
+    </script>
+
+    <script>
+      const backBtn = document.getElementById("back-btn");
+      backBtn.addEventListener("click", () => {
+        window.location.href = "http://localhost:3001/home.html";
+      });
+    </script>
+
+    <!-- <script>
+      function takePhoto() {
+        var video = document.createElement("video");
+        var canvas = document.createElement("canvas");
+        var photoButton = document.createElement("button");
+        photoButton.textContent = "Take Photo";
+
+        navigator.mediaDevices
+          .getUserMedia({ video: true, audio: false })
+          .then(function (stream) {
+            // code to access the camera
+            video.srcObject = stream;
+            video.play();
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            photoButton.onclick = function () {
+              var ctx = canvas.getContext("2d");
+              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+              var dataURL = canvas.toDataURL();
+              var xhr = new XMLHttpRequest();
+              xhr.open("POST", "/savephoto", true);
+              xhr.setRequestHeader("Content-Type", "application/json");
+              xhr.send(JSON.stringify({ photo: dataURL }));
+            };
+
+            document.body.appendChild(photoButton);
+          })
+          .catch(function (err) {
+            console.log("Error accessing the camera: " + err);
+          });
+      }
+    </script> -->
+
+    <script src="js/jquery.min.js"></script>
+    <script src="js/popper.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/main.js"></script>
+  </body>
+</html>

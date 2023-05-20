@@ -8,9 +8,11 @@
       src="https://cdn.plot.ly/plotly-2.20.0.min.js"
       charset="utf-8"
     ></script>
+    <link rel="stylesheet" href="style.css" />
     <title>Document</title>
   </head>
   <body>
+    <button id="back-btn">home page</button>
     <div id="chart" style="width: 50vw; margin: auto"></div>
     <script>
       // Fetch data from data.json file
@@ -42,6 +44,12 @@
           Plotly.newPlot("chart", [trace], layout, config);
         })
         .catch((error) => console.log(error));
+    </script>
+    <script>
+      const homeBtn = document.getElementById("back-btn");
+      homeBtn.addEventListener("click", () => {
+        window.location.href = "http://localhost:3001/home.html";
+      });
     </script>
   </body>
 </html>

@@ -15,10 +15,11 @@
     />
   </head>
   <body>
-    <button id="logout-btn">click here to logout</button>
+    <button id="back-btn">home page</button>
+    <button id="logout-btn">logout</button>
 
-    <h1 id="name"></h1>
-    <h1 id="total_attendance"></h1>
+    <h1 id="name" style="color: indigo"></h1>
+    <h1 id="total_attendance" style="color: indigo"></h1>
     <table id="attendance" class="display">
       <thead>
         <tr>
@@ -62,11 +63,6 @@
             pageLength: 10,
             dom: "Blfrtip",
             buttons: [
-              // {
-              //   extend: "excel",
-              //   text: "Export as Excel",
-              //   className: "btn btn-primary",
-              // },
               {
                 extend: "csv",
                 text: "Export as CSV",
@@ -95,6 +91,10 @@
           .catch((error) => {
             console.error(error);
           });
+      });
+      const backBtn = document.getElementById("back-btn");
+      backBtn.addEventListener("click", () => {
+        window.location.href = "http://localhost:3001/home.html";
       });
     </script>
   </body>

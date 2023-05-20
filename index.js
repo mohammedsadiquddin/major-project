@@ -3,6 +3,7 @@ const fs = require("fs");
 const session = require("express-session");
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
+const path = require("path");
 
 const app = express();
 
@@ -12,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 
 //serving public file
 app.use(express.static(__dirname));
-
+// app.use(express.static(__dirname + '/public'));
 // Set up session management
 app.use(
   session({
@@ -96,6 +97,24 @@ app.put("/data", (req, res) => {
       res.status(500).send("Error writing to file");
     } else {
       res.send("Data written to file");
+    }
+  });
+});
+
+app.use(bodyParser.json());
+
+app.post("/savephoto", function (req, res) {
+  let photoData = req.body.photo;
+  let photoBuffer = Buffer.from(photoData.split(",")[1], "base64");
+  let timestamp = new Date().getTime();
+  let filename = `./images/photo_${timestamp}.jpg`; // specify the path and filename here
+  fs.writeFile(filename, photoBuffer, function (err) {
+    if (err) {
+      console.log("Failed to save photo: " + err);
+      res.sendStatus(500);
+    } else {
+      console.log(`Photo saved as ${filename}`);
+      res.sendStatus(200);
     }
   });
 });

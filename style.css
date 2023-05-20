@@ -127,6 +127,29 @@ td {
   padding: 9px;
 }
 
+#back-btn {
+  cursor: pointer;
+  color: white;
+  background-color: maroon;
+  border: 2px solid maroon;
+  border-radius: 20px;
+  position: absolute;
+  left: 6px;
+  top: 10px;
+  padding: 9px;
+}
+#visualise-btn {
+  cursor: pointer;
+  color: white;
+  background-color: brown;
+  border: 2px solid brown;
+  border-radius: 20px;
+  position: absolute;
+  left: 6px;
+  top: 10px;
+  padding: 9px;
+}
+
 .input-field input {
   width: 50vw;
   padding: 10px;
